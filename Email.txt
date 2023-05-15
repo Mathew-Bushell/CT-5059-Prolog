@@ -1,0 +1,8 @@
+Dear Mr Solomons
+I am writing to you today to warn you about a potential exploit within our network that if left unpatched could result in an attack.
+Through the use of a simple buffer overflow exploit users, who are normally unable to modify our network whitelist are able to add new devices to it thus allowing malicious users to infiltrate our network granting them an opening to stage an attack. All it would take for them to do this is to get a simple script onto one of our employees laptops to add their device to the whitelist next time they connect to it.
+This exploit has been patched within the latest software update for our routers, so it should be easy to patch this loophole however the longer this is left unpatched this can result in our network being compromised and confidential documents being leaked.
+While we are talking about the whitelist I believe that some lower level staff should have their access restricted to increase our security.
+I hope you are able to fix this exploit soon.
+Regards,
+Bob Bobington
