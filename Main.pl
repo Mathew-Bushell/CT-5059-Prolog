@@ -1,54 +1,34 @@
-:-use_module(library(filesex)).
+%Opens file location and reads each character one by one from stream
+read_file(File, StrWord) :-
+   open(File, read, Stream),
+   get_char(Stream, Char1),
+   process_stream(Char1, Stream, StrWord),
+   close(Stream).
 
-% I'm using strings wherever there is supposed to be "text whose only meaning is itself"
-
-perform_catch(Terms,Encoding) :-
-   catch(perform(Terms,Encoding),ExceptionTerm,(format(user_error,"~q",[ExceptionTerm]),fail)).
-
-perform(Terms,Encoding) :-
-   WhereDir = "D:/Users/mathe/github/CT-5059-Prolog",
- %  directory_file_path(WhereDir,"prepacked",PrepackedDir),
- %  directory_file_path(PrepackedDir,"onepointfour",D1), % directory_file_path has bugs so go step by step here
- %  directory_file_path(D1,"basics",D2), % directory_file_path has bugs so go step by step here
-   directory_file_path(WhereDir,"Email.txt",File),
-   exists_file_or_throw(File),
-   open_or_throw(File,Stream,Encoding),
-   assertion(is_stream(Stream)),
-   % Exceptions due to syntax problems are left to bubble "up".
-   % If this happens in an interactive sessions, the tracer is triggered
-   % (unless you did "set_prolog_flag(debug_on_error,false)") and stops
-   % right before the cleanup goal
-   setup_call_cleanup(
-      true,
-      slurp_terms(Stream,Terms),
-      (format(user_error,"Closing ~q~n",[File]),close(Stream))),
-   assertion(\+is_stream(Stream)).
-
-% ---
-
-slurp_terms(Stream,Terms) :-
-   read_term(Stream,Term,[]),  % will throw on syntax error; unifies Term with "end_of_file" at EOF
-   slurp_terms_again(Term,Stream,Terms).
-
-% ---
-
-slurp_terms_again(end_of_file,_Stream,[]) :- !.
-slurp_terms_again(Term,Stream,[Term|Terms]) :-
-   slurp_terms(Stream,Terms).
-
-% ---
-
-open_or_throw(File,Stream,Encoding) :-
-   open(File,read,Stream,[encoding(Encoding)]),
+%ends recursion if end of file is met
+process_stream(end_of_file, _, StrWord) :-
+   write(StrWord),
    !.
 
-open_or_throw(File,_Stream,_Encoding) :-
-   domain_error("Opening file for reading failed",File). % but how do I know WHY it failed?
+%is responsible for reading each char
+process_stream(Char, Stream, StrWord):-
+   write(Char),
 
-% ---
+   add_to_word(Char, StrWord, StrWord2),
 
-exists_file_or_throw(File) :-
-   exists_file(File),!.
+   get_char(Stream,Char2),
+   process_stream(Char2, Stream, StrWord2).
 
-exists_file_or_throw(File) :-
-   domain_error("No such file",File). % domain error is as good as any
+%writes to file, temporarily exsists for testing purpose
+write_to_file(File, Text) :-
+   open(File, write, Stream),
+   write(Stream, Text), nl,
+   close(Stream).
+
+add_to_word(Char, StrWord, StrWord2):-
+   %Converts strings to list, combines them and then converts back to string
+   name(Char, CharList),
+   name(StrWord, ListWord),
+   append(ListWord, CharList, ListWord2),
+   name(StrWord2, ListWord2).
+
