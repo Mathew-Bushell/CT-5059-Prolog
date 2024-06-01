@@ -69,6 +69,7 @@ add_to_word(Char, StrWord, StrWord2):-
        )
    ).
 %This will count the number of occurences of each word in the email
+%Sorting removes all duplicate elements
 count_all(EmailList):-
    sort(EmailList,SortedEmail),
    member(Target,SortedEmail),
@@ -118,7 +119,7 @@ count_occurence([],Target,Count,CountedStr,[H|SortedEmail],EmailList):-
 % Score is leftover from begining to implement part C, implementation
 % was halted due to lack of time.
 final_print(FinalList,10,Score):-
-   write("end"),!.
+   !.
 
 final_print([H|FinalList],I,Score):-
    write(H),

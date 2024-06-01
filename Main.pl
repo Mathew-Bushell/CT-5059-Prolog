@@ -69,6 +69,7 @@ add_to_word(Char, StrWord, StrWord2):-
        )
    ).
 %This will count the number of occurences of each word in the email
+%Sorting removes all duplicate elements
 count_all(EmailList):-
    sort(EmailList,SortedEmail),
    member(Target,SortedEmail),
@@ -102,7 +103,9 @@ count_occurence([],Target,Count,CountedStr,[H|SortedEmail],EmailList):-
   % write(CountedStr1),
    member(NewTarget,SortedEmail),
    %if there are no more target words the recursion will stop
-   (   SortedEmail = ["you"] -> %This is an adhock fix which means it will miss out you in the final count but has been the only way so far I have found to stop the recursion.
+   (   SortedEmail = ["you"] -> %This is an adhock fix which means it will
+   %miss out you in the final count but has been the only way so far I
+   %have found to stop the recursion.
 
       split_string(CountedStr," ","",FinalList),
       sort(FinalList,FinalList1),
